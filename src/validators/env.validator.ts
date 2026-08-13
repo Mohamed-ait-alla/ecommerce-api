@@ -8,6 +8,8 @@ const envSchema = z.object({
         .regex(/^\d+$/, "PORT must be an integer")
         .default("3000")
         .transform(Number),
+
+    DATABASE_URL: z.url("DATABASE_URL must be a valid connection string"),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);
