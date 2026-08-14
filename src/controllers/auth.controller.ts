@@ -1,7 +1,11 @@
 import type { Request, Response } from "express";
-import { prisma } from "../config/db";
+import { sendResponse } from "../utils/apiResponse";
+import * as authService from "../services/auth.service";
 
-const register = async (req: Request, res: Response) => {};
+const register = async (req: Request, res: Response) => {
+    const result = await authService.registerUser(req.body);
+    sendResponse(res, 201, result, "Account created successfully");
+};
 
 const login = async (req: Request, res: Response) => {};
 
