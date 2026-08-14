@@ -1,12 +1,21 @@
 import express from "express";
+import authRoutes from "./routes/auth.route";
 import { env } from "./validators/env.validator.js";
+import { errorHandler } from "./middlewares/error.middleware";
 import { connectDB, disconnectDB } from "./config/db";
 
 const app = express();
 
+// middlewares
+app.use(express.json());
+
+// routes
+app.use("/api/v1/auth", authRoutes);
 app.use("/health", (req, res) => {
-    res.send("server health check");
+	res.send("server health check: OK");
 });
+
+app.use(errorHandler)
 
 connectDB();
 
