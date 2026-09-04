@@ -7,7 +7,10 @@ const register = async (req: Request, res: Response) => {
     sendResponse(res, 201, result, "Account created successfully");
 };
 
-const login = async (req: Request, res: Response) => {};
+const login = async (req: Request, res: Response) => {
+    const result = await authService.loginUser(req.body);
+    sendResponse(res, 200, result, "Logged in successfully");
+};
 
 const refreshToken = async (req: Request, res: Response) => {};
 
