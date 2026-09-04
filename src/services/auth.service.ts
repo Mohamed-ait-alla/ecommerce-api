@@ -3,7 +3,8 @@ import { env } from "../validators/env.validator";
 import { prisma } from "../config/db";
 import { AppError } from "../utils/AppError";
 import { issueTokenPair } from "./token.service";
-import { type RegisterInput } from "../validators/auth.validator";
+import type { RegisterInput, loginInput } from "../validators/auth.validator";
+import { email } from "zod";
 
 const registerUser = async (input: RegisterInput) => {
     const existing = await prisma.user.findUnique({
@@ -41,4 +42,23 @@ const registerUser = async (input: RegisterInput) => {
     return { ...tokens, userId: user.id };
 };
 
-export { registerUser };
+const loginUser = async (input: loginInput) => {
+    const user = await prisma.user.findUnique({
+        where: { email: input.email },
+    });
+
+    if (!user || !user.isActive) {
+        throw new AppError("Invalid email or password", 401);
+    }
+
+    const isPasswordValid = await bcrypt.compare(input.password, user.password);
+    if (!isPasswordValid) {
+        throw new AppError("Invalid email or password", 401);
+    }
+
+    const tokens = await issueTokenPair(user.id, user.role);
+
+    return { ...tokens, userId: user.id };
+};
+
+export { registerUser, loginUser };
