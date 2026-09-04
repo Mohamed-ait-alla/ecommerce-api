@@ -2,9 +2,8 @@ import bcrypt from "bcryptjs";
 import { env } from "../validators/env.validator";
 import { prisma } from "../config/db";
 import { AppError } from "../utils/AppError";
-import { issueTokenPair } from "./token.service";
+import { issueTokenPair, rotateTokens } from "./token.service";
 import type { RegisterInput, loginInput } from "../validators/auth.validator";
-import { email } from "zod";
 
 const registerUser = async (input: RegisterInput) => {
     const existing = await prisma.user.findUnique({
@@ -61,4 +60,12 @@ const loginUser = async (input: loginInput) => {
     return { ...tokens, userId: user.id };
 };
 
-export { registerUser, loginUser };
+const refreshUserTokens = async (refreshToken: string) => {
+	try {
+		return await rotateTokens(refreshToken);
+	} catch (error) {
+		throw new AppError('Invalid or expired refresh token', 401);
+	}
+}
+
+export { registerUser, loginUser, refreshUserTokens };
