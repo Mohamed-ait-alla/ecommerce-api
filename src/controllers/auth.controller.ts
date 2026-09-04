@@ -12,7 +12,11 @@ const login = async (req: Request, res: Response) => {
     sendResponse(res, 200, result, "Logged in successfully");
 };
 
-const refreshToken = async (req: Request, res: Response) => {};
+const refreshToken = async (req: Request, res: Response) => {
+	const { refreshToken } = req.body;
+	const tokens = await authService.refreshUserTokens(refreshToken);
+	sendResponse(res, 200, tokens, 'Tokens refreshed successfully');
+};
 
 const logout = async (req: Request, res: Response) => {};
 
