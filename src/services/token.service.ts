@@ -16,6 +16,10 @@ const generateRefreshToken = (payload: RefreshTokenPayload): string => {
     return jwt.sign(payload, env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
 };
 
+const verifyRefreshToken = (token: string): RefreshTokenPayload => {
+    return jwt.verify(token, env.JWT_REFRESH_SECRET) as RefreshTokenPayload;
+};
+
 export const issueTokenPair = async (userId: string, role: Role) => {
     // create a token row placeholder to get the tokenId
     const dbToken = await prisma.refreshToken.create({
@@ -41,4 +45,33 @@ export const issueTokenPair = async (userId: string, role: Role) => {
     });
 
     return { accessToken, refreshToken };
+};
+
+export const rotateTokens = async (oldRefreshToken: string) => {
+    const payload = verifyRefreshToken(oldRefreshToken);
+
+    const stored = await prisma.refreshToken.findUnique({
+        where: { id: payload.tokenId },
+    });
+
+    // verify the stored token
+    if (!stored || stored.revoked || stored.token !== oldRefreshToken) {
+        throw new Error("Invalid refresh token");
+    }
+
+    if (stored.expiredAt < new Date()) {
+        throw new Error("Refresh token expired");
+    }
+
+    // update the stored token's status & issue new ones
+    await prisma.refreshToken.update({
+        where: { id: stored.id },
+        data: { revoked: true },
+    });
+
+    const user = await prisma.user.findUniqueOrThrow({
+        where: { id: payload.sub },
+    });
+
+	return issueTokenPair(user.id, user.role);
 };
