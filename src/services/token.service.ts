@@ -21,6 +21,10 @@ const verifyRefreshToken = (token: string): RefreshTokenPayload => {
     return jwt.verify(token, env.JWT_REFRESH_SECRET) as RefreshTokenPayload;
 };
 
+export const verifyAccessToken = (token: string): AccessTokenPayload => {
+	return jwt.verify(token, env.JWT_ACCESS_SECRET) as AccessTokenPayload;
+}
+
 export const issueTokenPair = async (userId: string, role: Role) => {
     // create a token row placeholder to get the tokenId
     const dbToken = await prisma.refreshToken.create({
