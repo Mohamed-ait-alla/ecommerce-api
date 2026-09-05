@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { sendResponse } from "../utils/apiResponse";
 import * as authService from "../services/auth.service";
+import type { AuthenticatedRequest } from "../types/auth.types";
 
 const register = async (req: Request, res: Response) => {
     const result = await authService.registerUser(res, req.body);
@@ -24,6 +25,9 @@ const logout = async (req: Request, res: Response) => {
 	sendResponse(res, 200, undefined, 'Logged out successfully');
 };
 
-const me = async (req: Request, res: Response) => {};
+const me = async (req: AuthenticatedRequest, res: Response) => {
+	const user = await authService.getCurrentUser(req.user!.id);
+	sendResponse(res, 200, user, undefined);
+};
 
 export { register, login, refreshToken, logout, me };
