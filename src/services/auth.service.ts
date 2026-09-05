@@ -2,10 +2,13 @@ import bcrypt from "bcryptjs";
 import { env } from "../validators/env.validator";
 import { prisma } from "../config/db";
 import { AppError } from "../utils/AppError";
-import { issueTokenPair, rotateTokens } from "./token.service";
+import {
+    issueTokenPair,
+    revokeRefreshToken,
+    rotateTokens,
+} from "./token.service";
 import type { Response } from "express";
 import type { RegisterInput, loginInput } from "../validators/auth.validator";
-import strict from "node:assert/strict";
 
 const registerUser = async (res: Response, input: RegisterInput) => {
     const existing = await prisma.user.findUnique({
@@ -69,7 +72,7 @@ const loginUser = async (res: Response, input: loginInput) => {
 
     const tokens = await issueTokenPair(user.id, user.role);
 
-	const { accessToken, refreshToken } = tokens;
+    const { accessToken, refreshToken } = tokens;
 
     res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
@@ -90,4 +93,8 @@ const refreshUserTokens = async (res: Response, refreshToken: string) => {
     }
 };
 
-export { registerUser, loginUser, refreshUserTokens };
+const logoutUser = async (res: Response, refreshToken: string) => {
+    await revokeRefreshToken(res, refreshToken);
+};
+
+export { registerUser, loginUser, refreshUserTokens, logoutUser };
