@@ -1,3 +1,4 @@
+import type { Request } from "express";
 import { Role } from "../generated/prisma/client";
 
 export interface AccessTokenPayload {
@@ -8,4 +9,11 @@ export interface AccessTokenPayload {
 export interface RefreshTokenPayload {
     sub: string;
     tokenId: string;
+}
+
+export interface AuthenticatedRequest extends Request {
+	user?: {
+		id: string;
+		role: Role;
+	}
 }
