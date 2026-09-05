@@ -18,7 +18,11 @@ const refreshToken = async (req: Request, res: Response) => {
 	sendResponse(res, 200, tokens, 'Tokens refreshed successfully');
 };
 
-const logout = async (req: Request, res: Response) => {};
+const logout = async (req: Request, res: Response) => {
+	const refreshToken = req.cookies.refreshToken;
+	await authService.logoutUser(res, refreshToken);
+	sendResponse(res, 200, undefined, 'Logged out successfully');
+};
 
 const me = async (req: Request, res: Response) => {};
 
