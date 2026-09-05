@@ -1,4 +1,5 @@
 import express from "express";
+import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.route";
 import { env } from "./validators/env.validator.js";
 import { errorHandler } from "./middlewares/error.middleware";
@@ -8,6 +9,7 @@ const app = express();
 
 // middlewares
 app.use(express.json());
+app.use(cookieParser());
 
 // routes
 app.use("/api/v1/auth", authRoutes);
