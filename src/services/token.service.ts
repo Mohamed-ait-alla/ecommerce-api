@@ -89,3 +89,17 @@ export const rotateTokens = async (res: Response, oldRefreshToken: string) => {
 
     return { accessToken };
 };
+
+export const revokeRefreshToken = async (res: Response, token: string) => {
+    await prisma.refreshToken.updateMany({
+        where: { token },
+        data: { revoked: true },
+    });
+
+    res.clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: env.NODE_ENV === "production",
+        sameSite: "strict",
+        path: "/api/v1/auth/refresh",
+    });
+};
