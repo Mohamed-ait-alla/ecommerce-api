@@ -3,9 +3,11 @@ import { env } from "../validators/env.validator";
 import { prisma } from "../config/db";
 import { AppError } from "../utils/AppError";
 import { issueTokenPair, rotateTokens } from "./token.service";
+import type { Response } from "express";
 import type { RegisterInput, loginInput } from "../validators/auth.validator";
+import strict from "node:assert/strict";
 
-const registerUser = async (input: RegisterInput) => {
+const registerUser = async (res: Response, input: RegisterInput) => {
     const existing = await prisma.user.findUnique({
         where: { email: input.email },
     });
@@ -38,10 +40,20 @@ const registerUser = async (input: RegisterInput) => {
 
     const tokens = await issueTokenPair(user.id, user.role);
 
-    return { ...tokens, userId: user.id };
+    const { accessToken, refreshToken } = tokens;
+
+    res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        path: "/api/v1/auth/refresh",
+    });
+
+    return { accessToken, userId: user.id };
 };
 
-const loginUser = async (input: loginInput) => {
+const loginUser = async (res: Response, input: loginInput) => {
     const user = await prisma.user.findUnique({
         where: { email: input.email },
     });
@@ -57,15 +69,25 @@ const loginUser = async (input: loginInput) => {
 
     const tokens = await issueTokenPair(user.id, user.role);
 
-    return { ...tokens, userId: user.id };
+	const { accessToken, refreshToken } = tokens;
+
+    res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        path: "/api/v1/auth/refresh",
+    });
+
+    return { accessToken, userId: user.id };
 };
 
-const refreshUserTokens = async (refreshToken: string) => {
-	try {
-		return await rotateTokens(refreshToken);
-	} catch (error) {
-		throw new AppError('Invalid or expired refresh token', 401);
-	}
-}
+const refreshUserTokens = async (res: Response, refreshToken: string) => {
+    try {
+        return await rotateTokens(res, refreshToken);
+    } catch (error) {
+        throw new AppError("Invalid or expired refresh token", 401);
+    }
+};
 
 export { registerUser, loginUser, refreshUserTokens };

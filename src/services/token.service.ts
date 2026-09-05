@@ -1,8 +1,9 @@
 import jwt from "jsonwebtoken";
 import ms, { type StringValue } from "ms";
 import { env } from "../validators/env.validator";
-import type { Role } from "../generated/prisma/enums";
 import { prisma } from "../config/db";
+import type { Response } from "express";
+import type { Role } from "../generated/prisma/enums";
 import type {
     AccessTokenPayload,
     RefreshTokenPayload,
@@ -47,7 +48,7 @@ export const issueTokenPair = async (userId: string, role: Role) => {
     return { accessToken, refreshToken };
 };
 
-export const rotateTokens = async (oldRefreshToken: string) => {
+export const rotateTokens = async (res: Response, oldRefreshToken: string) => {
     const payload = verifyRefreshToken(oldRefreshToken);
 
     const stored = await prisma.refreshToken.findUnique({
@@ -73,5 +74,18 @@ export const rotateTokens = async (oldRefreshToken: string) => {
         where: { id: payload.sub },
     });
 
-	return issueTokenPair(user.id, user.role);
+    const { accessToken, refreshToken } = await issueTokenPair(
+        user.id,
+        user.role,
+    );
+
+    res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        path: "/api/v1/auth/refresh",
+    });
+
+    return { accessToken };
 };

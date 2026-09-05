@@ -3,18 +3,18 @@ import { sendResponse } from "../utils/apiResponse";
 import * as authService from "../services/auth.service";
 
 const register = async (req: Request, res: Response) => {
-    const result = await authService.registerUser(req.body);
+    const result = await authService.registerUser(res, req.body);
     sendResponse(res, 201, result, "Account created successfully");
 };
 
 const login = async (req: Request, res: Response) => {
-    const result = await authService.loginUser(req.body);
+    const result = await authService.loginUser(res, req.body);
     sendResponse(res, 200, result, "Logged in successfully");
 };
 
 const refreshToken = async (req: Request, res: Response) => {
-	const { refreshToken } = req.body;
-	const tokens = await authService.refreshUserTokens(refreshToken);
+	const refreshToken = req.cookies.refreshToken;
+	const tokens = await authService.refreshUserTokens(res, refreshToken);
 	sendResponse(res, 200, tokens, 'Tokens refreshed successfully');
 };
 
