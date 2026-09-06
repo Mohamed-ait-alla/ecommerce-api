@@ -36,12 +36,25 @@ export const listProducts = async (query: ListProductsQuery) => {
         prisma.product.count({ where }),
     ]);
 
-	if (items.length < 1) {
-		throw new AppError('No items found at the moment', 404);
-	}
+    if (items.length < 1) {
+        throw new AppError("No items found at the moment", 404);
+    }
 
     return {
         items,
         meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
     };
+};
+
+export const getProduct = async (productId: string) => {
+    const product = await prisma.product.findUnique({
+        where: { id: productId },
+        include: { category: { select: { id: true, name: true, slug: true } } },
+    });
+
+    if (!product || !product.isActive) {
+        throw new AppError("Product not found", 404);
+    }
+
+    return product;
 };
