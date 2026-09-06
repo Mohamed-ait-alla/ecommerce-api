@@ -21,4 +21,10 @@ export const listProductsQuerySchema = z.object({
     }),
 });
 
+export const productIdParamSchema = z.object({
+    params: z.object({
+        id: z.uuid(),
+    }),
+});
+
 export type ListProductsQuery = z.infer<typeof listProductsQuerySchema>['query'];
