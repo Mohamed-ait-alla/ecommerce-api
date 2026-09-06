@@ -14,10 +14,15 @@ export const validate =
     (schema: ZodObject) =>
     (req: Request, _res: Response, next: NextFunction) => {
         try {
-            const parsed = schema.parse({ body: req.body, query: req.query });
+            const parsed = schema.parse({
+                body: req.body,
+                query: req.query,
+                params: req.params,
+            });
 
             if (parsed.body !== undefined) req.body = parsed.body;
             if (parsed.query !== undefined) updateQuery(req, parsed.query);
+			if (parsed.params !== undefined) Object.assign(req.params, parsed.params);
 
             next();
         } catch (error) {
