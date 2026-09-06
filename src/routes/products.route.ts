@@ -6,11 +6,7 @@ import { listProductsQuerySchema } from "../validators/product.validator";
 const router = Router();
 
 // public routes
-router.get(
-    "/",
-    validate(listProductsQuerySchema),
-    productController.listProducts,
-);
+router.get('/', validate(listProductsQuerySchema), productController.listProducts);
 
 // admin routes
 
