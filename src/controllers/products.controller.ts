@@ -8,7 +8,11 @@ const listProducts = async (req: Request, res: Response) => {
 	sendResponse(res, 200, products);
 };
 
-const getProductById = async (req: Request, res: Response) => {};
+const getProductById = async (req: Request, res: Response) => {
+	console.log("the id parameter is: ", req.params.id);
+	const product = await productService.getProduct(req.params.id as string);
+	sendResponse(res, 200, product);
+};
 
 const addProduct = async (req: Request, res: Response) => {};
 
