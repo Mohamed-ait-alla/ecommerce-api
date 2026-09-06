@@ -1,6 +1,7 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.route";
+import productRoutes from "./routes/products.route";
 import { env } from "./validators/env.validator.js";
 import { errorHandler } from "./middlewares/error.middleware";
 import { connectDB, disconnectDB } from "./config/db";
@@ -13,6 +14,7 @@ app.use(cookieParser());
 
 // routes
 app.use("/api/v1/auth", authRoutes);
+app.use('/api/v1/products', productRoutes);
 app.use("/health", (req, res) => {
 	res.send("server health check: OK");
 });
