@@ -1,7 +1,24 @@
 import { prisma } from "../config/db";
 import { AppError } from "../utils/AppError";
+import { slugify } from "../utils/slugify";
 import type { Prisma } from "../generated/prisma/client";
-import type { ListProductsQuery } from "../validators/product.validator";
+import type {
+    ListProductsQuery,
+    AddProductsInput,
+} from "../validators/product.validator";
+
+const generateUniqueSlug = async (name: string): Promise<string> => {
+    const base = slugify(name);
+    let slug = base;
+    let counter = 1;
+
+    while (await prisma.product.findUnique({ where: { slug } })) {
+        slug = `${base}-${counter}`;
+        counter++;
+    }
+
+    return slug;
+};
 
 export const listProducts = async (query: ListProductsQuery) => {
     const { page, limit, search, category, minPrice, maxPrice, sort } = query;
@@ -57,4 +74,24 @@ export const getProduct = async (productId: string) => {
     }
 
     return product;
+};
+
+export const createProduct = async (input: AddProductsInput) => {
+    const category = await prisma.category.findUnique({
+        where: { id: input.categoryId },
+    });
+    if (!category) {
+        throw new AppError("Category not found", 404);
+    }
+
+    const existingSku = await prisma.product.findUnique({
+        where: { sku: input.sku },
+    });
+    if (existingSku) {
+        throw new AppError("A product with this SKU already exists", 409);
+    }
+
+    const slug = await generateUniqueSlug(input.name);
+
+    return await prisma.product.create({ data: { ...input, slug } });
 };
