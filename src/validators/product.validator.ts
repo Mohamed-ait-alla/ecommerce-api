@@ -39,5 +39,18 @@ export const addProductSchema = z.object({
     }),
 });
 
+export const updateProductSchema = z.object({
+    body: z.object({
+        name: z.string().min(1).max(200).optional(),
+        description: z.string().min(1).optional(),
+        price: z.number().positive().optional(),
+        stock: z.number().int().nonnegative().optional(),
+        images: z.array(z.url()).optional(),
+        categoryId: z.uuid().optional(),
+        isActive: z.boolean().optional(),
+    }),
+});
+
 export type ListProductsQuery = z.infer<typeof listProductsQuerySchema>['query'];
 export type AddProductsInput = z.infer<typeof addProductSchema>['body'];
+export type UpdateProductInput = z.infer<typeof updateProductSchema>['body'];
