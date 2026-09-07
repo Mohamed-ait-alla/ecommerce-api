@@ -2,6 +2,7 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.route";
 import productRoutes from "./routes/product.route";
+import categoryRoutes from "./routes/category.route";
 import { env } from "./validators/env.validator.js";
 import { errorHandler } from "./middlewares/error.middleware";
 import { connectDB, disconnectDB } from "./config/db";
@@ -13,9 +14,10 @@ app.use(express.json());
 app.use(cookieParser());
 
 // routes
-app.use("/api/v1/auth", authRoutes);
+app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/products', productRoutes);
-app.use("/health", (req, res) => {
+app.use('/api/v1/categories', categoryRoutes);
+app.use('/health', (req, res) => {
 	res.send("server health check: OK");
 });
 
