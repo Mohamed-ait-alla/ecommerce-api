@@ -7,6 +7,7 @@ import {
     productIdParamSchema,
     addProductSchema,
     updateProductSchema,
+    adjustStockSchema,
 } from "../validators/product.validator";
 
 const router = Router();
@@ -38,6 +39,14 @@ router.delete(
     requireRole('ADMIN'),
     validate(productIdParamSchema),
     productController.deleteProduct,
+);
+
+router.patch(
+    '/:id/inventory',
+    requireAuth,
+    requireRole('ADMIN'),
+    validate(adjustStockSchema),
+    productController.adjustStock,
 );
 
 export default router;
