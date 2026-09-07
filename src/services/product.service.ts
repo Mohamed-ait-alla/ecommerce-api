@@ -140,3 +140,22 @@ export const deleteProduct = async (productId: string) => {
         data: { isActive: false },
     });
 };
+
+export const adjustStock = async (productId: string, quantity: number) => {
+    const product = await prisma.product.findUnique({
+        where: { id: productId },
+    });
+    if (!product) {
+        throw new AppError("Product not found", 404);
+    }
+
+    const newStock = product.stock + quantity;
+    if (newStock < 0) {
+        throw new AppError("Insufficient stock for this adjustment", 400);
+    }
+
+    return await prisma.product.update({
+        where: { id: productId },
+        data: { stock: newStock },
+    });
+};
