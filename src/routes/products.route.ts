@@ -32,4 +32,12 @@ router.put(
     productController.updateProduct,
 );
 
+router.delete(
+    '/:id',
+    requireAuth,
+    requireRole('ADMIN'),
+    validate(productIdParamSchema),
+    productController.deleteProduct,
+);
+
 export default router;
