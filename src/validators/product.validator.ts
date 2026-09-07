@@ -27,4 +27,17 @@ export const productIdParamSchema = z.object({
     }),
 });
 
+export const addProductSchema = z.object({
+    body: z.object({
+        name: z.string().min(1).max(200),
+        description: z.string().min(1),
+        sku: z.string().min(1).max(50),
+        price: z.number().positive("Price must be greater than 0"),
+        stock: z.number().int().nonnegative().default(0),
+        images: z.array(z.url()).optional().default([]),
+        categoryId: z.uuid("Invalid category id"),
+    }),
+});
+
 export type ListProductsQuery = z.infer<typeof listProductsQuerySchema>['query'];
+export type AddProductsInput = z.infer<typeof addProductSchema>['body'];
