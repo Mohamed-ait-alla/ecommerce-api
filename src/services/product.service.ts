@@ -116,12 +116,27 @@ export const updateProduct = async (productId: string, input: UpdateProductInput
         }
     }
 
-	if (Object.keys(input).length === 0) {
-		return product;
-	}
+    if (Object.keys(input).length === 0) {
+        return product;
+    }
 
     return await prisma.product.update({
         where: { id: productId },
-        data: { ...input as Prisma.ProductUpdateInput},
+        data: { ...(input as Prisma.ProductUpdateInput) },
+    });
+};
+
+export const deleteProduct = async (productId: string) => {
+    const product = await prisma.product.findUnique({
+        where: { id: productId },
+    });
+    if (!product) {
+        throw new AppError("Product not found", 404);
+    }
+
+    // soft delete product
+    await prisma.product.update({
+        where: { id: productId },
+        data: { isActive: false },
     });
 };
