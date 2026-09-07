@@ -28,7 +28,10 @@ const updateProduct = async (req: Request, res: Response) => {
     sendResponse(res, 200, updatedProduct, 'Product updated successfully');
 };
 
-const deleteProduct = async (req: Request, res: Response) => {};
+const deleteProduct = async (req: Request, res: Response) => {
+	await productService.deleteProduct(req.params.id as string);
+	sendResponse(res, 200, undefined, 'Product deleted successfully');
+};
 
 export {
     listProducts,
