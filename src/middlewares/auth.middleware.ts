@@ -2,6 +2,7 @@ import { verifyAccessToken } from "../services/token.service";
 import { AppError } from "../utils/AppError";
 import type { Response, NextFunction } from "express";
 import type { AuthenticatedRequest } from "../types/auth.types";
+import type { Role } from "../generated/prisma/enums";
 
 export const requireAuth = (
     req: AuthenticatedRequest,
@@ -24,3 +25,21 @@ export const requireAuth = (
         next(new AppError('Invalid or expired token', 401));
     }
 };
+
+export const requireRole =
+    (...allowedRoles: Role[]) =>
+    (req: AuthenticatedRequest, _res: Response, next: NextFunction) => {
+        if (!req.user) {
+            return next(new AppError("Authentication required", 401));
+        }
+
+        if (!allowedRoles.includes(req.user.role)) {
+            return next(
+                new AppError(
+                    "You do not have permission to perform this action",
+                    403,
+                ),
+            );
+        }
+		next();
+    };
