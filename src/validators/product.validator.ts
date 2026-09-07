@@ -51,6 +51,16 @@ export const updateProductSchema = z.object({
     }),
 });
 
+export const adjustStockSchema = z.object({
+    params: z.object({ id: z.uuid() }),
+    body: z.object({
+        quantity: z
+            .number()
+            .int()
+            .refine((val) => val !== 0, 'Quantity cannot be zero'),
+    }),
+});
+
 export type ListProductsQuery = z.infer<typeof listProductsQuerySchema>['query'];
 export type AddProductsInput = z.infer<typeof addProductSchema>['body'];
 export type UpdateProductInput = z.infer<typeof updateProductSchema>['body'];
