@@ -6,6 +6,7 @@ import {
     listProductsQuerySchema,
     productIdParamSchema,
     addProductSchema,
+    updateProductSchema,
 } from "../validators/product.validator";
 
 const router = Router();
@@ -18,9 +19,17 @@ router.get('/:id', validate(productIdParamSchema), productController.getProductB
 router.post(
     '/',
     requireAuth,
-    requireRole("ADMIN"),
+    requireRole('ADMIN'),
     validate(addProductSchema),
     productController.addProduct,
+);
+
+router.put(
+    '/:id',
+    requireAuth,
+    requireRole('ADMIN'),
+    validate(updateProductSchema),
+    productController.updateProduct,
 );
 
 export default router;
