@@ -14,7 +14,10 @@ const getProductById = async (req: Request, res: Response) => {
 	sendResponse(res, 200, product);
 };
 
-const addProduct = async (req: Request, res: Response) => {};
+const addProduct = async (req: Request, res: Response) => {
+	const product = await productService.createProduct(req.body);
+	sendResponse(res, 201, product, 'Product created successfully');
+};
 
 const updateProduct = async (req: Request, res: Response) => {};
 
