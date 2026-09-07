@@ -29,8 +29,16 @@ const updateProduct = async (req: Request, res: Response) => {
 };
 
 const deleteProduct = async (req: Request, res: Response) => {
-	await productService.deleteProduct(req.params.id as string);
-	sendResponse(res, 200, undefined, 'Product deleted successfully');
+    await productService.deleteProduct(req.params.id as string);
+    sendResponse(res, 200, undefined, 'Product deleted successfully');
+};
+
+const adjustStock = async (req: Request, res: Response) => {
+    const product = await productService.adjustStock(
+        req.params.id as string,
+        req.body.quantity,
+    );
+    sendResponse(res, 200, product, 'Stock adjusted successfully');
 };
 
 export {
@@ -39,4 +47,5 @@ export {
     addProduct,
     updateProduct,
     deleteProduct,
+    adjustStock,
 };
