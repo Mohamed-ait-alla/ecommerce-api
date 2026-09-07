@@ -5,6 +5,7 @@ import type { Prisma } from "../generated/prisma/client";
 import type {
     ListProductsQuery,
     AddProductsInput,
+    UpdateProductInput,
 } from "../validators/product.validator";
 
 const generateUniqueSlug = async (name: string): Promise<string> => {
@@ -94,4 +95,33 @@ export const createProduct = async (input: AddProductsInput) => {
     const slug = await generateUniqueSlug(input.name);
 
     return await prisma.product.create({ data: { ...input, slug } });
+};
+
+export const updateProduct = async (productId: string, input: UpdateProductInput) => {
+    const product = await prisma.product.findUnique({
+        where: { id: productId },
+    });
+
+    if (!product) {
+        throw new AppError("Product not found", 404);
+    }
+
+    if (input.categoryId) {
+        const category = await prisma.category.findUnique({
+            where: { id: input.categoryId },
+        });
+
+        if (!category) {
+            throw new AppError("Category not found", 404);
+        }
+    }
+
+	if (Object.keys(input).length === 0) {
+		return product;
+	}
+
+    return await prisma.product.update({
+        where: { id: productId },
+        data: { ...input as Prisma.ProductUpdateInput},
+    });
 };
