@@ -7,4 +7,13 @@ export const createCategorySchema = z.object({
     }),
 });
 
+export const updateCategorySchema = z.object({
+    params: z.object({ id: z.uuid() }),
+    body: z.object({
+        name: z.string().min(1).max(100).optional(),
+        description: z.string().optional(),
+    }),
+});
+
 export type CreateCategoryInput = z.infer<typeof createCategorySchema>['body'];
+export type UpdateCategoryInput = z.infer<typeof updateCategorySchema>['body'];
