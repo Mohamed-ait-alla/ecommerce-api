@@ -20,4 +20,9 @@ const updateCategory = async (req: Request, res: Response) => {
     sendResponse(res, 200, updatedCategory, 'Category updated successfully');
 };
 
-export { listCategories, createCategory, updateCategory };
+const deleteCategory = async (req: Request, res: Response) => {
+    await categoryService.deleteCategory(req.params.id as string);
+    sendResponse(res, 200, undefined, 'Category deleted successfully');
+};
+
+export { listCategories, createCategory, updateCategory, deleteCategory };
