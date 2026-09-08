@@ -3,6 +3,7 @@ import * as categoryController from "../controllers/category.controller";
 import { validate } from "../middlewares/validate.middleware";
 import { requireAuth, requireRole } from "../middlewares/auth.middleware";
 import {
+    categoryIdParamSchema,
     createCategorySchema,
     updateCategorySchema,
 } from "../validators/category.validator";
@@ -27,6 +28,14 @@ router.put(
     requireRole('ADMIN'),
     validate(updateCategorySchema),
     categoryController.updateCategory,
+);
+
+router.delete(
+    '/:id',
+    requireAuth,
+    requireRole('ADMIN'),
+    validate(categoryIdParamSchema),
+    categoryController.deleteCategory,
 );
 
 export default router;
