@@ -53,3 +53,23 @@ export const updateCategory = async (categoryId: string, input: Prisma.CategoryU
         data: { ...input },
     });
 };
+
+export const deleteCategory = async (categoryId: string) => {
+    const category = await prisma.category.findUnique({
+        where: { id: categoryId },
+        include: { products: { take: 1 } },
+    });
+    if (!category) {
+        throw new AppError("Category not found", 404);
+    }
+
+	// check if a category still has products
+    if (category.products.length > 0) {
+        throw new AppError(
+            "Cannot delete a category that still has products. Reassign them first.",
+            409,
+        );
+    }
+
+    await prisma.category.delete({ where: { id: categoryId } });
+};
