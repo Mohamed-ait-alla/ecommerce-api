@@ -8,4 +8,9 @@ const getCart = async (req: AuthenticatedRequest, res: Response) => {
     sendResponse(res, 200, cart);
 };
 
-export { getCart };
+const addItem = async (req: AuthenticatedRequest, res: Response) => {
+	const cart = await cartService.addItemToCart(req.user!.id, req.body);
+	sendResponse(res, 201, cart, 'Item added to cart')
+}
+
+export { getCart, addItem };
