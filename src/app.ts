@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.route";
 import productRoutes from "./routes/product.route";
 import categoryRoutes from "./routes/category.route";
+import cartRoutes from "./routes/cart.route";
 import { env } from "./validators/env.validator.js";
 import { errorHandler } from "./middlewares/error.middleware";
 import { connectDB, disconnectDB } from "./config/db";
@@ -17,6 +18,7 @@ app.use(cookieParser());
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/products', productRoutes);
 app.use('/api/v1/categories', categoryRoutes);
+app.use('/api/v1/cart', cartRoutes);
 app.use('/health', (req, res) => {
 	res.send("server health check: OK");
 });
