@@ -1,5 +1,7 @@
 import { prisma } from "../config/db";
 import type { Prisma } from "../generated/prisma/client";
+import { AppError } from "../utils/AppError";
+import type { AddCartItemInput } from "../validators/cart.validator";
 
 const cartInclude = {
     items: {
@@ -45,4 +47,46 @@ export const getCart = async (userId: string) => {
     const cart = await getOrCreateCart(userId);
 
     return withTotals(cart);
+};
+
+export const addItemToCart = async (userId: string, input: AddCartItemInput) => {
+    const cart = await getOrCreateCart(userId);
+
+    // check product if exists before adding to cart
+    const product = await prisma.product.findUnique({
+        where: { id: input.productId },
+    });
+    if (!product || !product.isActive) {
+        throw new AppError("Product not found", 404);
+    }
+
+    const existingItem = await prisma.cartItem.findUnique({
+        where: {
+            cartId_productId: { cartId: cart.id, productId: input.productId },
+        },
+    });
+
+    // check against the TOTAL desired quantity (existing + new), This prevents bypassing stock limits
+    const desiredQuantity = (existingItem?.quantity ?? 0) + input.quantity;
+    if (desiredQuantity > product.stock) {
+        throw new AppError(
+            `Only ${product.stock} unit(s) of this product are available`,
+            400,
+        );
+    }
+
+    // add item or update quantity if item already exists in cart
+    await prisma.cartItem.upsert({
+        where: {
+            cartId_productId: { cartId: cart.id, productId: input.productId },
+        },
+        create: {
+            cartId: cart.id,
+            productId: input.productId,
+            quantity: input.quantity,
+        },
+        update: { quantity: desiredQuantity },
+    });
+
+    return getCart(userId);
 };
