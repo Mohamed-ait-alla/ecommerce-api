@@ -8,8 +8,16 @@ const listCategories = async (_req: Request, res: Response) => {
 };
 
 const createCategory = async (req: Request, res: Response) => {
-	const category = await categoryService.createCategory(req.body);
-	sendResponse(res, 201, category, 'Category created successfully');
+    const category = await categoryService.createCategory(req.body);
+    sendResponse(res, 201, category, 'Category created successfully');
 };
 
-export { listCategories, createCategory };
+const updateCategory = async (req: Request, res: Response) => {
+    const updatedCategory = await categoryService.updateCategory(
+        req.params.id as string,
+        req.body,
+    );
+    sendResponse(res, 200, updatedCategory, 'Category updated successfully');
+};
+
+export { listCategories, createCategory, updateCategory };
