@@ -2,6 +2,7 @@ import { prisma } from "../config/db";
 import { Prisma } from "../generated/prisma/client";
 import { AppError } from "../utils/AppError";
 import { slugify } from "../utils/slugify";
+import type { UpdateCategoryInput } from "../validators/category.validator";
 
 const generateUniqueSlug = async (name: string): Promise<string> => {
     const base = slugify(name);
@@ -31,4 +32,24 @@ export const createCategory = async (input: Prisma.CategoryCreateInput) => {
     const slug = await generateUniqueSlug(input.name);
 
     return await prisma.category.create({ data: { ...input, slug } });
+};
+
+export const updateCategory = async (categoryId: string, input: Prisma.CategoryUpdateInput) => {
+    const category = await prisma.category.findUnique({
+        where: { id: categoryId },
+    });
+    if (!category) {
+        throw new AppError("Category not found", 404);
+    }
+
+    // update slug if name property will be update
+    if (input.name) {
+        const newSlug = await generateUniqueSlug(input.name as string);
+        input.slug = newSlug;
+    }
+
+    return await prisma.category.update({
+        where: { id: categoryId },
+        data: { ...input },
+    });
 };
