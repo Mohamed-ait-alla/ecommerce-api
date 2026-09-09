@@ -1,7 +1,10 @@
 import { prisma } from "../config/db";
 import type { Prisma } from "../generated/prisma/client";
 import { AppError } from "../utils/AppError";
-import type { AddCartItemInput } from "../validators/cart.validator";
+import type {
+    AddCartItemInput,
+    UpdateCartItemInput,
+} from "../validators/cart.validator";
 
 const cartInclude = {
     items: {
@@ -86,6 +89,35 @@ export const addItemToCart = async (userId: string, input: AddCartItemInput) => 
             quantity: input.quantity,
         },
         update: { quantity: desiredQuantity },
+    });
+
+    return getCart(userId);
+};
+
+export const updateCartItem = async (userId: string, productId: string, input: UpdateCartItemInput) => {
+    const cart = await getOrCreateCart(userId);
+
+	// check for item existence
+    const item = await prisma.cartItem.findUnique({
+        where: { cartId_productId: { cartId: cart.id, productId } },
+        include: { product: true },
+    });
+    if (!item) {
+        throw new AppError("This product is not in your cart", 404);
+    }
+
+	// check for stock limits
+    if (input.quantity > item.product.stock) {
+        throw new AppError(
+            `Only ${item.product.stock} unit(s) of this product are available`,
+            400,
+        );
+    }
+
+	// update item's quantity
+    await prisma.cartItem.update({
+        where: { cartId_productId: { cartId: cart.id, productId } },
+        data: { quantity: input.quantity },
     });
 
     return getCart(userId);
