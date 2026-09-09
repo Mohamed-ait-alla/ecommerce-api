@@ -135,9 +135,20 @@ export const deleteCartItem = async (userId: string, productId: string) => {
         throw new AppError("This product is not in your cart", 404);
     }
 
-	// delete item from cart
+    // delete item from cart
     await prisma.cartItem.delete({
         where: { cartId_productId: { cartId: cart.id, productId } },
+    });
+
+    return getCart(userId);
+};
+
+export const clearCart = async (userId: string) => {
+    const cart = await getOrCreateCart(userId);
+
+    // clear cart
+    await prisma.cartItem.deleteMany({
+        where: { cartId: cart.id },
     });
 
     return getCart(userId);
