@@ -30,4 +30,9 @@ const deleteItem = async (req: AuthenticatedRequest, res: Response) => {
     sendResponse(res, 200, cart, 'Item deleted from cart');
 };
 
-export { getCart, addItem, updateItem, deleteItem };
+const clearCart = async (req: AuthenticatedRequest, res: Response) => {
+    const cart = await cartService.clearCart(req.user!.id);
+    sendResponse(res, 200, cart, 'Cart cleared');
+};
+
+export { getCart, addItem, updateItem, deleteItem, clearCart };
