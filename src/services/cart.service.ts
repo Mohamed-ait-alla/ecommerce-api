@@ -97,7 +97,7 @@ export const addItemToCart = async (userId: string, input: AddCartItemInput) => 
 export const updateCartItem = async (userId: string, productId: string, input: UpdateCartItemInput) => {
     const cart = await getOrCreateCart(userId);
 
-	// check for item existence
+    // check for item existence
     const item = await prisma.cartItem.findUnique({
         where: { cartId_productId: { cartId: cart.id, productId } },
         include: { product: true },
@@ -106,7 +106,7 @@ export const updateCartItem = async (userId: string, productId: string, input: U
         throw new AppError("This product is not in your cart", 404);
     }
 
-	// check for stock limits
+    // check for stock limits
     if (input.quantity > item.product.stock) {
         throw new AppError(
             `Only ${item.product.stock} unit(s) of this product are available`,
@@ -114,10 +114,30 @@ export const updateCartItem = async (userId: string, productId: string, input: U
         );
     }
 
-	// update item's quantity
+    // update item's quantity
     await prisma.cartItem.update({
         where: { cartId_productId: { cartId: cart.id, productId } },
         data: { quantity: input.quantity },
+    });
+
+    return getCart(userId);
+};
+
+export const deleteCartItem = async (userId: string, productId: string) => {
+    const cart = await getOrCreateCart(userId);
+
+    // check for item existence
+    const item = await prisma.cartItem.findUnique({
+        where: { cartId_productId: { cartId: cart.id, productId } },
+    });
+
+    if (!item) {
+        throw new AppError("This product is not in your cart", 404);
+    }
+
+	// delete item from cart
+    await prisma.cartItem.delete({
+        where: { cartId_productId: { cartId: cart.id, productId } },
     });
 
     return getCart(userId);
