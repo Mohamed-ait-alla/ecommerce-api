@@ -12,13 +12,17 @@ export const addCartItemSchema = z.object({
 });
 
 export const updateCartItemSchema = z.object({
-    params: z.object({ productId: z.uuid() }),
+    params: z.object({ productId: z.uuid('Invalid product id') }),
     body: z.object({
         quantity: z.coerce
             .number()
             .int()
             .positive('Quantity cannot be negative'),
     }),
+});
+
+export const cartItemParamSchema = z.object({
+    params: z.object({ productId: z.uuid('Invalid product id') }),
 });
 
 export type AddCartItemInput = z.infer<typeof addCartItemSchema>['body'];
