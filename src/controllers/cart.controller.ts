@@ -22,4 +22,12 @@ const updateItem = async (req: AuthenticatedRequest, res: Response) => {
     sendResponse(res, 200, cart, 'Cart item updated');
 };
 
-export { getCart, addItem, updateItem };
+const deleteItem = async (req: AuthenticatedRequest, res: Response) => {
+    const cart = await cartService.deleteCartItem(
+        req.user!.id,
+        req.params.productId as string,
+    );
+    sendResponse(res, 200, cart, 'Item deleted from cart');
+};
+
+export { getCart, addItem, updateItem, deleteItem };
