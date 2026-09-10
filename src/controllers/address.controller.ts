@@ -4,8 +4,16 @@ import { sendResponse } from "../utils/apiResponse";
 import * as addressService from "../services/address.service";
 
 const listAddresses = async (req: AuthenticatedRequest, res: Response) => {
-	const addresses = await addressService.listAddresses(req.user!.id);
-	sendResponse(res, 200, addresses);
+    const addresses = await addressService.listAddresses(req.user!.id);
+    sendResponse(res, 200, addresses);
 };
 
-export { listAddresses };
+const getAddress = async (req: AuthenticatedRequest, res: Response) => {
+    const address = await addressService.getAddressById(
+        req.user!.id,
+        req.params.id as string,
+    );
+    sendResponse(res, 200, address);
+};
+
+export { listAddresses, getAddress };
