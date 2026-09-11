@@ -16,4 +16,6 @@ router.get('/', addressController.listAddresses);
 router.get('/:id', validate(addressIdParamSchema), addressController.getAddress);
 router.post('/', validate(createAddressSchema), addressController.createAddress);
 router.put('/:id', validate(updateAddressSchema), addressController.updateAddress);
+router.delete('/:id', validate(addressIdParamSchema), addressController.deleteAddress);
+
 export default router;
