@@ -21,4 +21,13 @@ const createAddress = async (req: AuthenticatedRequest, res: Response) => {
     sendResponse(res, 201, address, 'Address created successfully');
 };
 
-export { listAddresses, getAddress, createAddress };
+const updateAddress = async (req: AuthenticatedRequest, res: Response) => {
+    const updatedAddress = await addressService.updateAddress(
+        req.user!.id,
+        req.params.id as string,
+        req.body,
+    );
+    sendResponse(res, 200, updatedAddress, 'Address updated successfully');
+};
+
+export { listAddresses, getAddress, createAddress, updateAddress };
