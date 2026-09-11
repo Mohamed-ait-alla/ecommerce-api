@@ -12,8 +12,22 @@ export const createAddressSchema = z.object({
     }),
 });
 
+export const updateAddressSchema = z.object({
+    params: z.object({ id: z.uuid() }),
+    body: z.object({
+        fullName: z.string().min(1).max(100).optional(),
+        phone: z.string().min(5).max(20).optional(),
+        street: z.string().min(1).max(200).optional(),
+        city: z.string().min(1).max(100).optional(),
+        postalCode: z.string().min(1).max(20).optional(),
+        country: z.string().min(1).max(100).optional(),
+        isDefault: z.boolean().optional(),
+    }),
+});
+
 export const addressIdParamSchema = z.object({
     params: z.object({ id: z.uuid() }),
 });
 
 export type CreateAddressInput = z.infer<typeof createAddressSchema>['body'];
+export type UpdateAddressInput = z.infer<typeof updateAddressSchema>['body'];
