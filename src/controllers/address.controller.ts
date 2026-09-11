@@ -30,4 +30,15 @@ const updateAddress = async (req: AuthenticatedRequest, res: Response) => {
     sendResponse(res, 200, updatedAddress, 'Address updated successfully');
 };
 
-export { listAddresses, getAddress, createAddress, updateAddress };
+const deleteAddress = async (req: AuthenticatedRequest, res: Response) => {
+    await addressService.deleteAddress(req.user!.id, req.params.id as string);
+    sendResponse(res, 200, undefined, 'Address deleted successfully');
+};
+
+export {
+    listAddresses,
+    getAddress,
+    createAddress,
+    updateAddress,
+    deleteAddress,
+};
