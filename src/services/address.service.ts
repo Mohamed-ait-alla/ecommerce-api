@@ -65,3 +65,32 @@ export const updateAddress = async (userId: string, addressId: string, input: Up
         });
     });
 };
+
+export const deleteAddress = async (userId: string, addressId: string) => {
+    const address = await prisma.address.findFirst({
+        where: { id: addressId, userId },
+    });
+    if (!address) {
+        throw new AppError("Address not found", 404);
+    }
+
+    // delete address, in case of the deleted address was the default one, set
+    // the most recently created one as the default one.
+    await prisma.$transaction(async (tx) => {
+        await prisma.address.delete({ where: { id: addressId } });
+
+        if (address.isDefault) {
+            const nextDefault = await prisma.address.findFirst({
+                where: { userId },
+                orderBy: { createdAt: 'desc' },
+            });
+
+            if (nextDefault) {
+                await prisma.address.update({
+                    where: { id: nextDefault.id },
+                    data: { isDefault: true },
+                });
+            }
+        }
+    });
+};
