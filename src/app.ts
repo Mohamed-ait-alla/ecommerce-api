@@ -6,6 +6,7 @@ import categoryRoutes from "./routes/category.route";
 import cartRoutes from "./routes/cart.route";
 import addressRoutes from "./routes/address.route";
 import orderRoutes from "./routes/order.route";
+import webhookRoutes from "./routes/webhook.route";
 import { env } from "./validators/env.validator.js";
 import { errorHandler } from "./middlewares/error.middleware";
 import { connectDB, disconnectDB } from "./config/db";
@@ -13,6 +14,7 @@ import { connectDB, disconnectDB } from "./config/db";
 const app = express();
 
 // middlewares
+app.use('/api/v1/webhooks', express.raw({ type: 'application/json' }), webhookRoutes) // Stripe needs the RAW request body to verify the webhook signature
 app.use(express.json());
 app.use(cookieParser());
 
