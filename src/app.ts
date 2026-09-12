@@ -5,6 +5,7 @@ import productRoutes from "./routes/product.route";
 import categoryRoutes from "./routes/category.route";
 import cartRoutes from "./routes/cart.route";
 import addressRoutes from "./routes/address.route";
+import orderRoutes from "./routes/order.route";
 import { env } from "./validators/env.validator.js";
 import { errorHandler } from "./middlewares/error.middleware";
 import { connectDB, disconnectDB } from "./config/db";
@@ -21,6 +22,7 @@ app.use('/api/v1/products', productRoutes);
 app.use('/api/v1/categories', categoryRoutes);
 app.use('/api/v1/cart', cartRoutes);
 app.use('/api/v1/addresses', addressRoutes);
+app.use('/api/v1/orders', orderRoutes);
 app.use('/health', (req, res) => {
 	res.send("server health check: OK");
 });
