@@ -1,5 +1,5 @@
 import { prisma } from "../config/db";
-import { Prisma } from "../generated/prisma/client";
+import { OrderStatus, Prisma } from "../generated/prisma/client";
 import { AppError } from "../utils/AppError";
 import { env } from "../validators/env.validator";
 import { stripe } from "../config/stripe";
@@ -62,7 +62,7 @@ export const checkout = async (userId: string, addressId: string) => {
             });
         }
 
-		// calculate total && create order
+        // calculate total && create order
         const tax = Number((subtotal * env.TAX_RATE).toFixed(2));
         const shippingCost = env.SHIPPING_COST;
         const total = Number((subtotal + tax + shippingCost).toFixed(2));
@@ -80,7 +80,7 @@ export const checkout = async (userId: string, addressId: string) => {
             include: { items: true, address: true },
         });
 
-		// remove items from user's cart
+        // remove items from user's cart
         await tx.cartItem.deleteMany({
             where: { cartId: cart.id },
         });
@@ -103,4 +103,44 @@ export const checkout = async (userId: string, addressId: string) => {
     });
 
     return { order: updatedOrder, clientSecret: paymentIntent.client_secret };
+};
+
+export const markOrderAsPaid = async (paymentIntentId: string) => {
+    const order = await prisma.order.findUnique({ where: { paymentIntentId } });
+    if (!order || order.status === OrderStatus.PAID) {
+        return;
+    }
+
+    await prisma.order.update({
+        where: { id: order.id },
+        data: { status: OrderStatus.PAID, paidAt: new Date() },
+    });
+};
+
+const restockOrderItems = async (tx: Prisma.TransactionClient, orderId: string) => {
+    const items = await tx.orderItem.findMany({ where: { orderId } });
+
+    for (const item of items) {
+        if (item.productId) {
+            await tx.product.update({
+                where: { id: item.productId },
+                data: { stock: { increment: item.quantity } },
+            });
+        }
+    }
+};
+
+export const markOrderPaymentFailed = async (paymentIntentId: string) => {
+    const order = await prisma.order.findUnique({ where: { paymentIntentId } });
+    if (!order || order.status !== OrderStatus.PENDING) {
+        return;
+    }
+
+    await prisma.$transaction(async (tx) => {
+        await restockOrderItems(tx, order.id);
+        await tx.order.update({
+            where: { id: order.id },
+            data: { status: OrderStatus.CANCELLED },
+        });
+    });
 };
