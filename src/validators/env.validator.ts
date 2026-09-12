@@ -21,6 +21,12 @@ const envSchema = z.object({
     JWT_REFRESH_EXPIRES_IN: z.string().default("7d"),
 
     BCRYPT_SALT_ROUNDS: z.coerce.number().default(10),
+
+    STRIPE_SECRET_KEY: z.string().min(1, "Stripe secret key is required"),
+    CURRENCY: z.string().default("usd"),
+
+    TAX_RATE: z.coerce.number().min(0).max(1).default(0),
+    SHIPPING_COST: z.coerce.number().min(0).default(5),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);
