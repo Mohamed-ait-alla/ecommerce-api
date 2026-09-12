@@ -3,6 +3,7 @@ import { OrderStatus, Prisma } from "../generated/prisma/client";
 import { AppError } from "../utils/AppError";
 import { env } from "../validators/env.validator";
 import { stripe } from "../config/stripe";
+import type { ListOrdersQuery } from "../validators/order.validator";
 
 export const checkout = async (userId: string, addressId: string) => {
     // check for user's address
@@ -143,4 +144,26 @@ export const markOrderPaymentFailed = async (paymentIntentId: string) => {
             data: { status: OrderStatus.CANCELLED },
         });
     });
+};
+
+export const listUserOrders = async (userId: string, query: ListOrdersQuery) => {
+    const { page, limit, status } = query;
+    const where: Prisma.OrderWhereInput = { userId, ...(status && { status }) };
+
+	// get user's orders with filtering and pagination
+    const [items, total] = await Promise.all([
+        prisma.order.findMany({
+            where,
+            include: { items: true, address: true },
+            orderBy: { createdAt: 'desc' },
+            skip: (page - 1) * limit,
+            take: limit,
+        }),
+        prisma.order.count({ where }),
+    ]);
+
+    return {
+        items,
+        meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
+    };
 };
