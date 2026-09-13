@@ -118,7 +118,10 @@ export const markOrderAsPaid = async (paymentIntentId: string) => {
     });
 };
 
-const restockOrderItems = async (tx: Prisma.TransactionClient, orderId: string) => {
+const restockOrderItems = async (
+    tx: Prisma.TransactionClient,
+    orderId: string,
+) => {
     const items = await tx.orderItem.findMany({ where: { orderId } });
 
     for (const item of items) {
@@ -211,4 +214,31 @@ export const listAllOrders = async (query: ListOrdersQuery) => {
         items,
         meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
     };
+};
+
+export const updateOrderStatus = async (orderId: string, status: OrderStatus) => {
+    const order = await prisma.order.findUnique({ where: { id: orderId } });
+
+    if (!order) {
+        throw new AppError("Order not found", 404);
+    }
+
+    // condition var used if an order needs to be cancelled
+    // or refunded, we need to restock order items
+    const isNewlyCancelledOrRefunded =
+        (status === 'CANCELLED' || status === 'REFUNDED') &&
+        order.status !== 'CANCELLED' &&
+        order.status !== 'REFUNDED';
+
+    return await prisma.$transaction(async (tx) => {
+        if (isNewlyCancelledOrRefunded) {
+            await restockOrderItems(tx, orderId);
+        }
+
+        return await tx.order.update({
+            where: { id: orderId },
+            data: { status },
+            include: { items: true, address: true },
+        });
+    });
 };
