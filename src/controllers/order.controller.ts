@@ -30,4 +30,12 @@ const getMyOrder = async (req: AuthenticatedRequest, res: Response) => {
     sendResponse(res, 200, order);
 };
 
-export { checkout, listMyOrders, getMyOrder };
+// admin controllers
+const listAllOrders = async (req: AuthenticatedRequest, res: Response) => {
+    const orders = await orderService.listAllOrders(
+        req.query as unknown as ListOrdersQuery,
+    );
+    sendResponse(res, 200, orders);
+};
+
+export { checkout, listMyOrders, getMyOrder, listAllOrders };
