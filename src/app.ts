@@ -7,6 +7,7 @@ import cartRoutes from "./routes/cart.route";
 import addressRoutes from "./routes/address.route";
 import orderRoutes from "./routes/order.route";
 import webhookRoutes from "./routes/webhook.route";
+import adminRoutes from "./routes/admin.route";
 import { env } from "./validators/env.validator.js";
 import { errorHandler } from "./middlewares/error.middleware";
 import { connectDB, disconnectDB } from "./config/db";
@@ -25,6 +26,7 @@ app.use('/api/v1/categories', categoryRoutes);
 app.use('/api/v1/cart', cartRoutes);
 app.use('/api/v1/addresses', addressRoutes);
 app.use('/api/v1/orders', orderRoutes);
+app.use('/api/v1/admin', adminRoutes);
 app.use('/health', (req, res) => {
 	res.send("server health check: OK");
 });
