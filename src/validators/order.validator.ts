@@ -13,6 +13,19 @@ export const listOrdersQuerySchema = z.object({
     }),
 });
 
+export const updateOrderStatusSchema = z.object({
+    params: z.object({ id: z.uuid() }),
+    body: z.object({
+        status: z.enum([
+            'PAID',
+            'SHIPPED',
+            'DELIVERED',
+            'CANCELLED',
+            'REFUNDED',
+        ]),
+    }),
+});
+
 export const orderIdParamSchema = z.object({
     params: z.object({ id: z.uuid() }),
 });
