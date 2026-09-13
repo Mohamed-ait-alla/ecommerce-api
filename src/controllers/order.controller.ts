@@ -22,4 +22,12 @@ const listMyOrders = async (req: AuthenticatedRequest, res: Response) => {
     sendResponse(res, 200, orders);
 };
 
-export { checkout, listMyOrders };
+const getMyOrder = async (req: AuthenticatedRequest, res: Response) => {
+    const order = await orderService.getUserOrderById(
+        req.user!.id,
+        req.params.id as string,
+    );
+    sendResponse(res, 200, order);
+};
+
+export { checkout, listMyOrders, getMyOrder };
