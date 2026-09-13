@@ -38,4 +38,12 @@ const listAllOrders = async (req: AuthenticatedRequest, res: Response) => {
     sendResponse(res, 200, orders);
 };
 
-export { checkout, listMyOrders, getMyOrder, listAllOrders };
+const updateOrderStatus = async (req: AuthenticatedRequest, res: Response) => {
+    const updatedOrder = await orderService.updateOrderStatus(
+        req.params.id as string,
+        req.body.status,
+    );
+    sendResponse(res, 200, updatedOrder, 'Order status updated');
+};
+
+export { checkout, listMyOrders, getMyOrder, listAllOrders, updateOrderStatus };
