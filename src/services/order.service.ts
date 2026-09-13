@@ -180,3 +180,35 @@ export const getUserOrderById = async (userId: string, orderId: string) => {
 
     return order;
 };
+
+export const listAllOrders = async (query: ListOrdersQuery) => {
+    const { page, limit, status } = query;
+    const where: Prisma.OrderWhereInput = { ...(status && { status }) };
+
+    const [items, total] = await Promise.all([
+        prisma.order.findMany({
+            where,
+            include: {
+                items: true,
+                address: true,
+                user: {
+                    select: {
+                        id: true,
+                        email: true,
+                        firstName: true,
+                        lastName: true,
+                    },
+                },
+            },
+            orderBy: { createdAt: 'desc' },
+            skip: (page - 1) * limit,
+            take: limit,
+        }),
+        prisma.order.count({ where }),
+    ]);
+
+    return {
+        items,
+        meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
+    };
+};
