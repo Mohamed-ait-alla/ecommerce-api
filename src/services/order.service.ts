@@ -150,7 +150,7 @@ export const listUserOrders = async (userId: string, query: ListOrdersQuery) => 
     const { page, limit, status } = query;
     const where: Prisma.OrderWhereInput = { userId, ...(status && { status }) };
 
-	// get user's orders with filtering and pagination
+    // get user's orders with filtering and pagination
     const [items, total] = await Promise.all([
         prisma.order.findMany({
             where,
@@ -166,4 +166,17 @@ export const listUserOrders = async (userId: string, query: ListOrdersQuery) => 
         items,
         meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
     };
+};
+
+export const getUserOrderById = async (userId: string, orderId: string) => {
+    const order = await prisma.order.findUnique({
+        where: { id: orderId, userId },
+        include: { items: true, address: true },
+    });
+
+    if (!order) {
+        throw new AppError("Order not found", 404);
+    }
+
+    return order;
 };
