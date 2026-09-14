@@ -8,6 +8,7 @@ import {
 import {
     listUsersQuerySchema,
     lowStockQuerySchema,
+    updateUserStatusSchema,
 } from "../validators/admin.validator";
 import * as orderController from "../controllers/order.controller";
 import * as dashboardController from "../controllers/dashboard.controller";
@@ -43,5 +44,10 @@ router.get(
 
 // users
 router.get('/users', validate(listUsersQuerySchema), userController.listUsers);
+router.patch(
+    '/users/:id/status',
+    validate(updateUserStatusSchema),
+    userController.updateUserStatus,
+);
 
 export default router;
