@@ -1,7 +1,8 @@
 import type { Request, Response } from "express";
-import * as productService from "../services/product.service";
-import { sendResponse } from "../utils/apiResponse";
 import type { ListProductsQuery } from "../validators/product.validator";
+import type { LowStockQuery } from "../validators/admin.validator";
+import { sendResponse } from "../utils/apiResponse";
+import * as productService from "../services/product.service";
 
 const listProducts = async (req: Request, res: Response) => {
     const products = await productService.listProducts(
@@ -41,6 +42,12 @@ const adjustStock = async (req: Request, res: Response) => {
     sendResponse(res, 200, product, 'Stock adjusted successfully');
 };
 
+const getLowStockProducts = async (req: Request, res: Response) => {
+    const { threshold } = req.query as unknown as LowStockQuery;
+    const products = await productService.getLowStockProducs(threshold);
+    sendResponse(res, 200, products);
+};
+
 export {
     listProducts,
     getProductById,
@@ -48,4 +55,5 @@ export {
     updateProduct,
     deleteProduct,
     adjustStock,
+    getLowStockProducts,
 };
