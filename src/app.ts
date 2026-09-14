@@ -1,5 +1,7 @@
 import express from "express";
 import cookieParser from "cookie-parser";
+import helmet from "helmet";
+import cors from "cors";
 import authRoutes from "./routes/auth.route";
 import productRoutes from "./routes/product.route";
 import categoryRoutes from "./routes/category.route";
@@ -18,6 +20,8 @@ const app = express();
 app.use('/api/v1/webhooks', express.raw({ type: 'application/json' }), webhookRoutes) // Stripe needs the RAW request body to verify the webhook signature
 app.use(express.json());
 app.use(cookieParser());
+app.use(helmet());
+app.use(cors());
 
 // routes
 app.use('/api/v1/auth', authRoutes);
