@@ -159,3 +159,11 @@ export const adjustStock = async (productId: string, quantity: number) => {
         data: { stock: newStock },
     });
 };
+
+export const getLowStockProducs = async (threshold: number) => {
+    return await prisma.product.findMany({
+        where: { isActive: true, stock: { lte: threshold } },
+        orderBy: { stock: 'asc' },
+        include: { category: { select: { id: true, name: true, slug: true } } },
+    });
+};
