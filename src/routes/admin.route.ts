@@ -5,8 +5,10 @@ import {
     listOrdersQuerySchema,
     updateOrderStatusSchema,
 } from "../validators/order.validator";
+import { lowStockQuerySchema } from "../validators/admin.validator";
 import * as orderController from "../controllers/order.controller";
 import * as dashboardController from "../controllers/dashboard.controller";
+import * as productController from "../controllers/product.controller";
 
 const router = Router();
 
@@ -26,6 +28,13 @@ router.patch(
     '/orders/:id/status',
     validate(updateOrderStatusSchema),
     orderController.updateOrderStatus,
+);
+
+// inventory
+router.get(
+    '/products/low-stock',
+    validate(lowStockQuerySchema),
+    productController.getLowStockProducts,
 );
 
 export default router;
