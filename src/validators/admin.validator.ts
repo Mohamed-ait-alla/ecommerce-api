@@ -14,5 +14,12 @@ export const listUsersQuerySchema = z.object({
     }),
 });
 
+export const updateUserStatusSchema = z.object({
+    params: z.object({ id: z.uuid() }),
+    body: z.object({
+        isActive: z.boolean(),
+    }),
+});
+
 export type LowStockQuery = z.infer<typeof lowStockQuerySchema>['query'];
 export type ListUsersQuery = z.infer<typeof listUsersQuerySchema>['query'];
