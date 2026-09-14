@@ -5,10 +5,14 @@ import {
     listOrdersQuerySchema,
     updateOrderStatusSchema,
 } from "../validators/order.validator";
-import { lowStockQuerySchema } from "../validators/admin.validator";
+import {
+    listUsersQuerySchema,
+    lowStockQuerySchema,
+} from "../validators/admin.validator";
 import * as orderController from "../controllers/order.controller";
 import * as dashboardController from "../controllers/dashboard.controller";
 import * as productController from "../controllers/product.controller";
+import * as userController from "../controllers/user.controller";
 
 const router = Router();
 
@@ -36,5 +40,8 @@ router.get(
     validate(lowStockQuerySchema),
     productController.getLowStockProducts,
 );
+
+// users
+router.get('/users', validate(listUsersQuerySchema), userController.listUsers);
 
 export default router;
