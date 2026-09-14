@@ -1,5 +1,6 @@
 import type { ListUsersQuery } from "../validators/admin.validator";
 import { prisma } from "../config/db";
+import { AppError } from "../utils/AppError";
 
 const userSelect = {
     id: true,
@@ -36,4 +37,26 @@ export const listUsers = async (query: ListUsersQuery) => {
         items,
         meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
     };
+};
+
+export const updateUserStatus = async (userId: string, isActive: boolean) => {
+    const user = await prisma.user.findUnique({
+        where: { id: userId },
+    });
+
+    if (!user) {
+        throw new AppError('User not found', 404);
+    }
+
+    // check for user role
+    if (user.role === 'ADMIN') {
+        throw new AppError('Cannot change the status of an admin account', 403);
+    }
+
+	// update user status & return results
+    return await prisma.user.update({
+        where: { id: userId },
+        data: { isActive },
+        select: userSelect,
+    });
 };
