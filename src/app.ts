@@ -13,6 +13,7 @@ import webhookRoutes from "./routes/webhook.route";
 import adminRoutes from "./routes/admin.route";
 import { env } from "./validators/env.validator.js";
 import { errorHandler } from "./middlewares/error.middleware";
+import { notFoundHandler } from "./middlewares/notFound.middleware";
 import { connectDB, disconnectDB } from "./config/db";
 
 const app = express();
@@ -37,6 +38,7 @@ app.use('/health', (req, res) => {
 	res.send("server health check: OK");
 });
 
+app.use(notFoundHandler);
 app.use(errorHandler)
 
 connectDB();
