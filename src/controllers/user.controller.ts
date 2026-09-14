@@ -10,4 +10,12 @@ const listUsers = async (req: Request, res: Response) => {
     sendResponse(res, 200, users);
 };
 
-export { listUsers };
+const updateUserStatus = async (req: Request, res: Response) => {
+    const updatedUser = await userService.updateUserStatus(
+        req.params.id as string,
+        req.body.isActive,
+    );
+    sendResponse(res, 200, updatedUser, 'User status updated');
+};
+
+export { listUsers, updateUserStatus };
