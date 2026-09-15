@@ -2,7 +2,9 @@ import { z } from "zod";
 import { exit } from "node:process";
 
 const envSchema = z.object({
-    NODE_ENV: z.enum(["development", "production"]).default("development"),
+    NODE_ENV: z
+        .enum(["development", "production", "test"])
+        .default("development"),
     PORT: z
         .string()
         .regex(/^\d+$/, "PORT must be an integer")
