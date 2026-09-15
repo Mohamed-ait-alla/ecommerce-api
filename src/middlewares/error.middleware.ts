@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import { AppError } from "../utils/AppError";
+import { logger } from "../utils/logger";
 
 export const errorHandler = (
     err: Error,
@@ -15,7 +16,7 @@ export const errorHandler = (
         return;
     }
 
-    console.log("Unexpected Error: ", err);
+    logger.error('Unexprected error', { message: err.message, stack: err.stack});
     res.status(500).json({
         success: false,
         message: "Something went wrong. Please try again later.",
