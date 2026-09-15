@@ -14,6 +14,7 @@ import adminRoutes from "./routes/admin.route";
 import { errorHandler } from "./middlewares/error.middleware";
 import { notFoundHandler } from "./middlewares/notFound.middleware";
 import { requestLogger } from "./middlewares/requestLogger.middleware";
+import { generalLimiter } from "./middlewares/rateLimiter.middleware";
 
 
 export const app = express();
@@ -26,6 +27,7 @@ app.use(helmet());
 app.use(cors());
 app.use(compression());
 app.use(requestLogger);
+app.use(generalLimiter);
 
 // routes
 app.use('/api/v1/auth', authRoutes);
