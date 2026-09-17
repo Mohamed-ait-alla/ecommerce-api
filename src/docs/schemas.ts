@@ -19,7 +19,6 @@ export const userSchema = z.object({
 
 export const authTokensSchema = z.object({
   accessToken: z.string(),
-  refreshToken: z.string(),
   userId: z.uuid(),
 });
 
