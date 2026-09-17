@@ -21,7 +21,7 @@
     },
     "homepage": "https://github.com/Mohamed-ait-alla/ecomerce-api#readme",
     "dependencies": {
-        "@apidevtools/swagger-parser": "^13.0.0",
+        "@asteasolutions/zod-to-openapi": "^9.1.0",
         "@prisma/adapter-pg": "^7.9.1",
         "@prisma/client": "^7.9.1",
         "bcryptjs": "^3.0.3",
