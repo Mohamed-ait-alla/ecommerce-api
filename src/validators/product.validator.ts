@@ -40,6 +40,7 @@ export const addProductSchema = z.object({
 });
 
 export const updateProductSchema = z.object({
+    params: z.object({ id: z.uuid() }),
     body: z.object({
         name: z.string().min(1).max(200).optional(),
         description: z.string().min(1).optional(),
