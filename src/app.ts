@@ -4,8 +4,8 @@ import helmet from "helmet";
 import cors from "cors";
 import compression from "compression";
 import swaggerUi from "swagger-ui-express";
-import { loadSwaggerSpec } from "./config/swagger";
 
+import { openApiDocument } from "./docs/openapi";
 import { errorHandler } from "./middlewares/error.middleware";
 import { notFoundHandler } from "./middlewares/notFound.middleware";
 import { requestLogger } from "./middlewares/requestLogger.middleware";
@@ -49,9 +49,8 @@ app.use('/health', (_req, res) => {
     res.status(200).json({ success: true, message: 'server health check: OK' });
 });
 
-// Swagger
-const swaggerSpec = await loadSwaggerSpec();
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+// API documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocument));
 
 // routes
 app.use('/api/v1/auth', authRoutes);
