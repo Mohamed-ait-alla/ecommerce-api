@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { requireAuth } from "../middlewares/auth.middleware";
-import { validate } from "../middlewares/validate.middleware";
+import { requireAuth } from "../middlewares/auth.middleware.js";
+import { validate } from "../middlewares/validate.middleware.js";
 import {
     addressIdParamSchema,
     createAddressSchema,
 	updateAddressSchema,
-} from "../validators/address.validator";
-import * as addressController from "../controllers/address.controller";
+} from "../validators/address.validator.js";
+import * as addressController from "../controllers/address.controller.js";
 
 const router = Router();
 

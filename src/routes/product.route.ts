@@ -1,14 +1,14 @@
 import { Router } from "express";
-import * as productController from "../controllers/product.controller";
-import { validate } from "../middlewares/validate.middleware";
-import { requireAuth, requireRole } from "../middlewares/auth.middleware";
+import * as productController from "../controllers/product.controller.js";
+import { validate } from "../middlewares/validate.middleware.js";
+import { requireAuth, requireRole } from "../middlewares/auth.middleware.js";
 import {
     listProductsQuerySchema,
     productIdParamSchema,
     addProductSchema,
     updateProductSchema,
     adjustStockSchema,
-} from "../validators/product.validator";
+} from "../validators/product.validator.js";
 
 const router = Router();
 

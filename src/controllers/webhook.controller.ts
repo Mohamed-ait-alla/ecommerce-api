@@ -1,8 +1,8 @@
 import type { Request, Response } from "express";
-import { env } from "../validators/env.validator";
-import { AppError } from "../utils/AppError";
+import { env } from "../validators/env.validator.js";
+import { AppError } from "../utils/AppError.js";
 import Stripe from "stripe";
-import * as orderService from "../services/order.service";
+import * as orderService from "../services/order.service.js";
 
 export const handleStripeWebhook = async (req: Request, res: Response) => {
     const signature = req.headers['stripe-signature'];

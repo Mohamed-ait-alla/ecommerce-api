@@ -1,6 +1,6 @@
-import type { ListUsersQuery } from "../validators/admin.validator";
-import { prisma } from "../config/db";
-import { AppError } from "../utils/AppError";
+import type { ListUsersQuery } from "../validators/admin.validator.js";
+import { prisma } from "../config/db.js";
+import { AppError } from "../utils/AppError.js";
 
 const userSelect = {
     id: true,

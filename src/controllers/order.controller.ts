@@ -1,8 +1,8 @@
 import type { Response } from "express";
-import type { AuthenticatedRequest } from "../types/auth.types";
-import type { ListOrdersQuery } from "../validators/order.validator";
-import { sendResponse } from "../utils/apiResponse";
-import * as orderService from "../services/order.service";
+import type { AuthenticatedRequest } from "../types/auth.types.js";
+import type { ListOrdersQuery } from "../validators/order.validator.js";
+import { sendResponse } from "../utils/apiResponse.js";
+import * as orderService from "../services/order.service.js";
 
 const checkout = async (req: AuthenticatedRequest, res: Response) => {
     const order = await orderService.checkout(req.user!.id, req.body.addressId);

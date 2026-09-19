@@ -1,10 +1,10 @@
-import { prisma } from "../config/db";
-import { Prisma } from "../generated/prisma/client";
-import { AppError } from "../utils/AppError";
+import { prisma } from "../config/db.js";
+import { Prisma } from "../generated/prisma/client.js";
+import { AppError } from "../utils/AppError.js";
 import type {
     CreateAddressInput,
     UpdateAddressInput,
-} from "../validators/address.validator";
+} from "../validators/address.validator.js";
 
 export const listAddresses = async (userId: string) => {
     return await prisma.address.findMany({

@@ -1,5 +1,5 @@
-import { prisma } from "../config/db";
-import type { OrderStatus } from "../generated/prisma/enums";
+import { prisma } from "../config/db.js";
+import type { OrderStatus } from "../generated/prisma/enums.js";
 
 // paid cases
 const PAID_STATUS: OrderStatus[] = ['PAID', 'SHIPPED', 'DELIVERED'];

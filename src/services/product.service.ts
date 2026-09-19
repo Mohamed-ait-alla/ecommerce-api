@@ -1,12 +1,12 @@
-import { prisma } from "../config/db";
-import { AppError } from "../utils/AppError";
-import { slugify } from "../utils/slugify";
-import type { Prisma } from "../generated/prisma/client";
+import { prisma } from "../config/db.js";
+import { AppError } from "../utils/AppError.js";
+import { slugify } from "../utils/slugify.js";
+import type { Prisma } from "../generated/prisma/client.js";
 import type {
     ListProductsQuery,
     AddProductsInput,
     UpdateProductInput,
-} from "../validators/product.validator";
+} from "../validators/product.validator.js";
 
 const generateUniqueSlug = async (name: string): Promise<string> => {
     const base = slugify(name);

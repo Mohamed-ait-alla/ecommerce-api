@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { requireAuth } from "../middlewares/auth.middleware";
-import { validate } from "../middlewares/validate.middleware";
+import { requireAuth } from "../middlewares/auth.middleware.js";
+import { validate } from "../middlewares/validate.middleware.js";
 import {
     addCartItemSchema,
     cartItemParamSchema,
     updateCartItemSchema,
-} from "../validators/cart.validator";
-import * as cartController from "../controllers/cart.controller";
+} from "../validators/cart.validator.js";
+import * as cartController from "../controllers/cart.controller.js";
 
 const router = Router();
 

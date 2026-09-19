@@ -1,9 +1,9 @@
 import express from "express";
-import { validate } from "../middlewares/validate.middleware";
-import { registerSchema, loginSchema } from "../validators/auth.validator";
-import { requireAuth } from "../middlewares/auth.middleware";
-import { authLimiter } from "../middlewares/rateLimiter.middleware";
-import * as authControllers from "../controllers/auth.controller";
+import { validate } from "../middlewares/validate.middleware.js";
+import { registerSchema, loginSchema } from "../validators/auth.validator.js";
+import { requireAuth } from "../middlewares/auth.middleware.js";
+import { authLimiter } from "../middlewares/rateLimiter.middleware.js";
+import * as authControllers from "../controllers/auth.controller.js";
 
 const router = express.Router();
 

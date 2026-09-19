@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
-import { sendResponse } from "../utils/apiResponse";
-import * as authService from "../services/auth.service";
-import type { AuthenticatedRequest } from "../types/auth.types";
+import { sendResponse } from "../utils/apiResponse.js";
+import * as authService from "../services/auth.service.js";
+import type { AuthenticatedRequest } from "../types/auth.types.js";
 
 const register = async (req: Request, res: Response) => {
     const result = await authService.registerUser(res, req.body);

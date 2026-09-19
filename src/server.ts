@@ -1,7 +1,7 @@
-import { app } from "./app";
-import { env } from "./validators/env.validator";
-import { logger } from "./utils/logger";
-import { connectDB, disconnectDB } from "./config/db";
+import { app } from "./app.js";
+import { env } from "./validators/env.validator.js";
+import { logger } from "./utils/logger.js";
+import { connectDB, disconnectDB } from "./config/db.js";
 
 connectDB();
 

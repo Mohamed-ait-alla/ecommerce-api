@@ -1,9 +1,9 @@
-import { prisma } from "../config/db";
-import { OrderStatus, Prisma } from "../generated/prisma/client";
-import { AppError } from "../utils/AppError";
-import { env } from "../validators/env.validator";
-import { stripe } from "../config/stripe";
-import type { ListOrdersQuery } from "../validators/order.validator";
+import { prisma } from "../config/db.js";
+import { OrderStatus, Prisma } from "../generated/prisma/client.js";
+import { AppError } from "../utils/AppError.js";
+import { env } from "../validators/env.validator.js";
+import { stripe } from "../config/stripe.js";
+import type { ListOrdersQuery } from "../validators/order.validator.js";
 
 export const checkout = async (userId: string, addressId: string) => {
     // check for user's address

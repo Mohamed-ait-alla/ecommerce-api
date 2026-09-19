@@ -1,10 +1,10 @@
-import { prisma } from "../config/db";
-import type { Prisma } from "../generated/prisma/client";
-import { AppError } from "../utils/AppError";
+import { prisma } from "../config/db.js";
+import type { Prisma } from "../generated/prisma/client.js";
+import { AppError } from "../utils/AppError.js";
 import type {
     AddCartItemInput,
     UpdateCartItemInput,
-} from "../validators/cart.validator";
+} from "../validators/cart.validator.js";
 
 const cartInclude = {
     items: {

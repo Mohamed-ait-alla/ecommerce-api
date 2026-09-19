@@ -1,8 +1,8 @@
-import { prisma } from "../config/db";
-import { Prisma } from "../generated/prisma/client";
-import { AppError } from "../utils/AppError";
-import { slugify } from "../utils/slugify";
-import type { UpdateCategoryInput } from "../validators/category.validator";
+import { prisma } from "../config/db.js";
+import { Prisma } from "../generated/prisma/client.js";
+import { AppError } from "../utils/AppError.js";
+import { slugify } from "../utils/slugify.js";
+import type { UpdateCategoryInput } from "../validators/category.validator.js";
 
 const generateUniqueSlug = async (name: string): Promise<string> => {
     const base = slugify(name);

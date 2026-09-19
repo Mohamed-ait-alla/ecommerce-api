@@ -5,20 +5,20 @@ import cors from "cors";
 import compression from "compression";
 import swaggerUi from "swagger-ui-express";
 
-import { openApiDocument } from "./docs/openapi";
-import { errorHandler } from "./middlewares/error.middleware";
-import { notFoundHandler } from "./middlewares/notFound.middleware";
-import { requestLogger } from "./middlewares/requestLogger.middleware";
-import { generalLimiter } from "./middlewares/rateLimiter.middleware";
+import { openApiDocument } from "./docs/openapi.js";
+import { errorHandler } from "./middlewares/error.middleware.js";
+import { notFoundHandler } from "./middlewares/notFound.middleware.js";
+import { requestLogger } from "./middlewares/requestLogger.middleware.js";
+import { generalLimiter } from "./middlewares/rateLimiter.middleware.js";
 
-import authRoutes from "./routes/auth.route";
-import productRoutes from "./routes/product.route";
-import categoryRoutes from "./routes/category.route";
-import cartRoutes from "./routes/cart.route";
-import addressRoutes from "./routes/address.route";
-import orderRoutes from "./routes/order.route";
-import webhookRoutes from "./routes/webhook.route";
-import adminRoutes from "./routes/admin.route";
+import authRoutes from "./routes/auth.route.js";
+import productRoutes from "./routes/product.route.js";
+import categoryRoutes from "./routes/category.route.js";
+import cartRoutes from "./routes/cart.route.js";
+import addressRoutes from "./routes/address.route.js";
+import orderRoutes from "./routes/order.route.js";
+import webhookRoutes from "./routes/webhook.route.js";
+import adminRoutes from "./routes/admin.route.js";
 
 export const app = express();
 

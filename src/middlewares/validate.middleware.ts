@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import { ZodError, ZodObject } from "zod";
-import { AppError } from "../utils/AppError";
+import { AppError } from "../utils/AppError.js";
 
 const updateQuery = (req: Request, value: any) => {
     Object.defineProperty(req, "query", {

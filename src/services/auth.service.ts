@@ -1,14 +1,14 @@
 import bcrypt from "bcryptjs";
-import { env } from "../validators/env.validator";
-import { prisma } from "../config/db";
-import { AppError } from "../utils/AppError";
+import { env } from "../validators/env.validator.js";
+import { prisma } from "../config/db.js";
+import { AppError } from "../utils/AppError.js";
 import {
     issueTokenPair,
     revokeRefreshToken,
     rotateTokens,
-} from "./token.service";
+} from "./token.service.js";
 import type { Response } from "express";
-import type { RegisterInput, loginInput } from "../validators/auth.validator";
+import type { RegisterInput, loginInput } from "../validators/auth.validator.js";
 
 const registerUser = async (res: Response, input: RegisterInput) => {
     const existing = await prisma.user.findUnique({

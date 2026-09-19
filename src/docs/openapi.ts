@@ -19,37 +19,37 @@ import {
     commonErrors,
     BEARER_AUTH,
     refreshTokenCookieSchema,
-} from "./schemas";
+} from "./schemas.js";
 
-import { registerSchema, loginSchema } from "../validators/auth.validator";
+import { registerSchema, loginSchema } from "../validators/auth.validator.js";
 import {
     addProductSchema,
     updateProductSchema,
     listProductsQuerySchema,
     adjustStockSchema,
-} from "../validators/product.validator";
+} from "../validators/product.validator.js";
 import {
     createCategorySchema,
     updateCategorySchema,
-} from "../validators/category.validator";
+} from "../validators/category.validator.js";
 import {
     addCartItemSchema,
     updateCartItemSchema,
-} from "../validators/cart.validator";
+} from "../validators/cart.validator.js";
 import {
     checkoutSchema,
     listOrdersQuerySchema,
     updateOrderStatusSchema,
-} from "../validators/order.validator";
+} from "../validators/order.validator.js";
 import {
     createAddressSchema,
     updateAddressSchema,
-} from "../validators/address.validator";
+} from "../validators/address.validator.js";
 import {
     lowStockQuerySchema,
     listUsersQuerySchema,
     updateUserStatusSchema,
-} from "../validators/admin.validator";
+} from "../validators/admin.validator.js";
 
 const registry = new OpenAPIRegistry();
 

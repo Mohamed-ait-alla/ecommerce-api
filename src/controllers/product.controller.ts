@@ -1,8 +1,8 @@
 import type { Request, Response } from "express";
-import type { ListProductsQuery } from "../validators/product.validator";
-import type { LowStockQuery } from "../validators/admin.validator";
-import { sendResponse } from "../utils/apiResponse";
-import * as productService from "../services/product.service";
+import type { ListProductsQuery } from "../validators/product.validator.js";
+import type { LowStockQuery } from "../validators/admin.validator.js";
+import { sendResponse } from "../utils/apiResponse.js";
+import * as productService from "../services/product.service.js";
 
 const listProducts = async (req: Request, res: Response) => {
     const products = await productService.listProducts(

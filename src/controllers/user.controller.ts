@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
-import type { ListUsersQuery } from "../validators/admin.validator";
-import { sendResponse } from "../utils/apiResponse";
-import * as userService from "../services/user.service";
+import type { ListUsersQuery } from "../validators/admin.validator.js";
+import { sendResponse } from "../utils/apiResponse.js";
+import * as userService from "../services/user.service.js";
 
 const listUsers = async (req: Request, res: Response) => {
     const users = await userService.listUsers(

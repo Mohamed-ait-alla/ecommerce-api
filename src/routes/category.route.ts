@@ -1,12 +1,12 @@
 import { Router } from "express";
-import * as categoryController from "../controllers/category.controller";
-import { validate } from "../middlewares/validate.middleware";
-import { requireAuth, requireRole } from "../middlewares/auth.middleware";
+import * as categoryController from "../controllers/category.controller.js";
+import { validate } from "../middlewares/validate.middleware.js";
+import { requireAuth, requireRole } from "../middlewares/auth.middleware.js";
 import {
     categoryIdParamSchema,
     createCategorySchema,
     updateCategorySchema,
-} from "../validators/category.validator";
+} from "../validators/category.validator.js";
 
 const router = Router();
 

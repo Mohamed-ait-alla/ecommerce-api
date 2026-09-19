@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { OrderStatus } from "../generated/prisma/enums";
+import { OrderStatus } from "../generated/prisma/enums.js";
 
 export const checkoutSchema = z.object({
     body: z.object({ addressId: z.uuid("Invalid address id") }),

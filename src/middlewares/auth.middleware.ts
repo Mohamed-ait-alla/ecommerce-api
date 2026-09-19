@@ -1,8 +1,8 @@
-import { verifyAccessToken } from "../services/token.service";
-import { AppError } from "../utils/AppError";
+import { verifyAccessToken } from "../services/token.service.js";
+import { AppError } from "../utils/AppError.js";
 import type { Response, NextFunction } from "express";
-import type { AuthenticatedRequest } from "../types/auth.types";
-import type { Role } from "../generated/prisma/enums";
+import type { AuthenticatedRequest } from "../types/auth.types.js";
+import type { Role } from "../generated/prisma/enums.js";
 
 export const requireAuth = (
     req: AuthenticatedRequest,

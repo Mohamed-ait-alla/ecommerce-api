@@ -1,5 +1,5 @@
 import type { Request } from "express";
-import { Role } from "../generated/prisma/client";
+import { Role } from "../generated/prisma/client.js";
 
 export interface AccessTokenPayload {
     sub: string; // user id

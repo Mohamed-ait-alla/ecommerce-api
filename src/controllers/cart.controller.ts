@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
-import type { AuthenticatedRequest } from "../types/auth.types";
-import { sendResponse } from "../utils/apiResponse";
-import * as cartService from "../services/cart.service";
+import type { AuthenticatedRequest } from "../types/auth.types.js";
+import { sendResponse } from "../utils/apiResponse.js";
+import * as cartService from "../services/cart.service.js";
 
 const getCart = async (req: AuthenticatedRequest, res: Response) => {
     const cart = await cartService.getCart(req.user!.id);

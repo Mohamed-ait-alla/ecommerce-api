@@ -1,19 +1,19 @@
 import { Router } from "express";
-import { requireAuth, requireRole } from "../middlewares/auth.middleware";
-import { validate } from "../middlewares/validate.middleware";
+import { requireAuth, requireRole } from "../middlewares/auth.middleware.js";
+import { validate } from "../middlewares/validate.middleware.js";
 import {
     listOrdersQuerySchema,
     updateOrderStatusSchema,
-} from "../validators/order.validator";
+} from "../validators/order.validator.js";
 import {
     listUsersQuerySchema,
     lowStockQuerySchema,
     updateUserStatusSchema,
-} from "../validators/admin.validator";
-import * as orderController from "../controllers/order.controller";
-import * as dashboardController from "../controllers/dashboard.controller";
-import * as productController from "../controllers/product.controller";
-import * as userController from "../controllers/user.controller";
+} from "../validators/admin.validator.js";
+import * as orderController from "../controllers/order.controller.js";
+import * as dashboardController from "../controllers/dashboard.controller.js";
+import * as productController from "../controllers/product.controller.js";
+import * as userController from "../controllers/user.controller.js";
 
 const router = Router();
 

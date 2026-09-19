@@ -1,13 +1,13 @@
 import jwt from "jsonwebtoken";
 import ms, { type StringValue } from "ms";
-import { env } from "../validators/env.validator";
-import { prisma } from "../config/db";
+import { env } from "../validators/env.validator.js";
+import { prisma } from "../config/db.js";
 import type { Response } from "express";
-import type { Role } from "../generated/prisma/enums";
+import type { Role } from "../generated/prisma/enums.js";
 import type {
     AccessTokenPayload,
     RefreshTokenPayload,
-} from "../types/auth.types";
+} from "../types/auth.types.js";
 
 const generateAccessToken = (payload: AccessTokenPayload): string => {
     return jwt.sign(payload, env.JWT_ACCESS_SECRET, { expiresIn: "15m" });
