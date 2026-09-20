@@ -138,6 +138,9 @@ make re      # fclean + build + up, in one step
 | `NODE_ENV` | `development`, `production`, or `test` | `development` |
 | `PORT` | Port the server listens on | `3000` |
 | `DATABASE_URL` | PostgreSQL connection string | `postgresql://user:pass@localhost:5432/ecommerce` |
+| `DATABASE_USER` | Database user | postgres |
+| `DATABASE_PASSWORD` | Database password | — |
+| `DATABASE_NAME` | Database name | ecommerece |
 | `JWT_ACCESS_SECRET` | Signing secret for access tokens (32+ chars) | — |
 | `JWT_REFRESH_SECRET` | Signing secret for refresh tokens (32+ chars) | — |
 | `JWT_ACCESS_EXPIRES_IN` | Access token lifetime | `15m` |
