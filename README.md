@@ -98,7 +98,7 @@ Each module (auth, products, categories, cart, orders, addresses, admin) follows
 ### Local Setup
 
 ```bash
-git clone https://github.com/Mohamed-ait-alla/ecomerce-api.git
+git clone https://github.com/Mohamed-ait-alla/ecommerce-api.git
 cd ecommerce-api
 npm install
 
